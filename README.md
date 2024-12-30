@@ -1,4 +1,3 @@
-```markdown
 # express-bloom-guard
 
 Middleware for Express using a BloomFilter to revoke tokens.
@@ -10,5 +9,5 @@ You may do anything at all with this software, as long as pizza or coffee is occ
 No warranties. If things break (or you feel existential dread), it’s all on you.  
 
 Enjoy, share, and don’t forget the pizza.
-```
+
 
