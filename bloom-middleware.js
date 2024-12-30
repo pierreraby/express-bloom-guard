@@ -1,4 +1,4 @@
-import {has} from './bloommodule.js';
+import {has} from './bloom-module.js';
 
 export default (req, res, next) => {
   try {

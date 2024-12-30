@@ -2,8 +2,8 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import {auth} from './auth.js';
 import {admin} from './auth.js';
-import checkRevocation from './bloomfilter.js';
-import {add} from './bloommodule.js';
+import checkRevocation from './bloom-middleware.js';
+import {add} from './bloom-module.js';
 
 const app = express();
 const port = 3000;
