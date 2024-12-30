@@ -17,7 +17,7 @@ function getTokensData() {
         "name": "John Doe",
         "jti": jti,
         "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
-        "admin": false
+        "admin": "no"
       },
       process.env.JWT_SECRET_KEY,
       {
@@ -89,7 +89,7 @@ const tokenadmin = jwt.sign({
   "name": "John Doe",
   "jti": nanoid(),
   "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
-  "admin": true
+  "admin": "yes"
   },
   process.env.JWT_SECRET_KEY,
   {
