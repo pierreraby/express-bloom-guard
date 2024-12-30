@@ -1,6 +1,10 @@
 import {filterHas} from './bloom-module.js';
 
-const claimsToCheck = ['jti', 'sub', 'fam'];
+const claimsToCheck = ['jti', 'fam', 'sub', 'admin'];
+// jti: revoke a device user session
+// fam: revoke all devices user sessions
+// sub: you are fired !!!
+// admin: you are not an admin anymore
 
 export default (req, res, next) => {
   try {
