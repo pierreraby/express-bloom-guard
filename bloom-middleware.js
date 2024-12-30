@@ -2,7 +2,7 @@ import {filterHas} from './bloom-module.js';
 
 const claimsToCheck = ['jti', 'fam', 'sub', 'admin'];
 // jti: revoke a device user session
-// fam: revoke all devices user sessions
+// fam: revoke all devices user sessions -> change family uuid claim when reconnecting
 // sub: you are fired !!!
 // admin: you are not an admin anymore
 
