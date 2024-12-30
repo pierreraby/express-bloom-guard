@@ -1,10 +1,18 @@
-import {has} from './bloom-module.js';
+import {filterHas} from './bloom-module.js';
+
+const claimsToCheck = ['jti', 'sub', 'fam'];
 
 export default (req, res, next) => {
   try {
-    if (has(req.token.jti)) {
-      throw new Error('Token is blacklisted');
+    for (const claim of claimsToCheck) {
+      if (!req.token[claim]) {
+        throw new Error(`Missing claim: ${ claim }`);
+      }
+      if (filterHas(claim + "-" + req.token[claim])) {
+        throw new Error(`Token ${ claim } is blacklisted`);
+      }
     }
+
     next();
   } catch (error) {
     // res.status(401).json({message: `Invalid token ! ${ error }`});

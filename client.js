@@ -94,22 +94,24 @@ const tokenadmin = jwt.sign({
   }
 );
 
+console.log('Generate Tokens to be revoked');
 const tokens_rev = getTokensData();
 console.log('Start Revokation')
 await revokeTokens(tokens_rev, tokenadmin)
 console.log('Revokation Done')
 
-console.log('Start get Protected with revoked tokens');
+console.log('Start "get protected" path with revoked tokens');
 const {revoked, norevoked} = await getProtected(tokens_rev)
-console.log('get Protected Done with revoked tokens')
+console.log('"get Protected" Done with revoked tokens')
 console.log('Revoked : ' + revoked)
 console.log('Not Revoked : ' + norevoked)
 
+console.log('Generate Tokens to be not revoked');
 const tokens_norev = getTokensData();
 
-console.log('Start get Protected with available tokens');
+console.log('Start "get protected" path with non revoked tokens');
 const {revoked: rev, norevoked: norev} = await getProtected(tokens_norev)
-console.log('get Protected Done with available tokens')
+console.log('"get Protected Done with available tokens')
 console.log('Revoked : ' + rev)
 console.log('Not Revoked : ' + norev)
 
