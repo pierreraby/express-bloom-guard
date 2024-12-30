@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.14.0",
     "async-mutex": "^0.5.0",
     "bloomfilter": "^0.0.21",
     "express": "^4.21.2",

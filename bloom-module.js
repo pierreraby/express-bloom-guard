@@ -1,5 +1,6 @@
 import { BloomFilter } from "bloomfilter";
 import { Mutex } from "async-mutex";
+import { eventEmitter } from "./db-module.js";
 
 const NUM_ITEMS = 1000000;
 const FP_RATE = 0.000000001;
@@ -32,6 +33,7 @@ export function filterClear() {
 
 export function filterAdd(value) {
   current.add(value) && next.add(value); // No need for a lock
+  eventEmitter.emit('addToDatabase', value); // Emit an event to add the claim to the database
 }
 
 export function filterHas(value) {
