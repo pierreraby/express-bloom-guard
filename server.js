@@ -1,6 +1,5 @@
 import express from 'express';
-import {auth} from './auth.js';
-import {admin} from './auth.js';
+import {auth, admin} from './auth-middleware.js';
 import checkRevocation from './bloom-middleware.js';
 import {filterAdd} from './bloom-module.js';
 
