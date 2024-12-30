@@ -1,7 +1,10 @@
 # express-bloom-guard
 
-Middleware for Express using a BloomFilter to revoke tokens.
-This repository is for testing and benchmarking purposes only.
+Middleware for Express using a BloomFilter to revoke tokens.  
+
+This repository is for testing and benchmarking purposes only.  
+
+To launch the server, client, etc., use the command of your favorite package manager, such as `pnpm run bench`.
 
 ## The Tiny "Pizza & Caffeine" License
 
