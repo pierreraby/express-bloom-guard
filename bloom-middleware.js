@@ -2,7 +2,6 @@ import {has} from './bloom-module.js';
 
 export default (req, res, next) => {
   try {
-    console.log(req.token.jti);
     if (has(req.token.jti)) {
       throw new Error('Token is blacklisted');
     }

@@ -2,28 +2,81 @@ import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 
 const NUM_ITEMS = 10000;
-const tokens = [];
 
-for (let i = 0; i < NUM_ITEMS; i++) {
-  const jti = nanoid();
-  const token = jwt.sign({
-      "iss": "https://auth.itsme.com",
-      "sub": "1234567890",
-      "aud": "https://api.itsme.com",
-      "name": "John Doe",
-      "jti": jti,
-      "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
-      "admin": false
-    },
-    process.env.JWT_SECRET_KEY,
-    {
-      expiresIn: '1h'
+function getTokensData() {
+  const tokensData = [];
+  for (let i = 0; i < NUM_ITEMS; i++) {
+    const jti = nanoid();
+    const token = jwt.sign({
+        "iss": "https://auth.itsme.com",
+        "sub": "1234567890",
+        "aud": "https://api.itsme.com",
+        "name": "John Doe",
+        "jti": jti,
+        "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
+        "admin": false
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: '1h'
+      }
+    );
+    tokensData.push({token, jti});
+    if (i % 1000 === 0) {
+      console.log(i);
     }
-  );
-  tokens.push({token, jti});
-  if (i % 1000 === 0) {
-    console.log(i);
   }
+  console.log('tokensData array length : ' +tokensData.length);
+  return tokensData;
+}
+
+async function revokeTokens(tokensData, tokenadmin) {
+  for (const tokenData of tokensData) {
+    try {
+      const res = await fetch('http://localhost:3000/revoke', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tokenadmin}`
+        },
+        body: JSON.stringify({ jti: tokenData.jti })
+      });
+
+      if (res.status !== 200) {
+        throw new Error('error');
+      }
+    } catch (err) {
+      console.log('revocation error : ' + err);
+    }
+  }
+}
+
+async function getProtected(tokensData) {
+  let revoked = 0;
+  let norevoked = 0;
+  for (const tokenData of tokensData) {
+    try {
+      const res = await fetch('http://localhost:3000/protected2', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tokenData.token}`
+        }
+      });
+
+      if (res.status === 401) {
+        revoked++;
+        continue;
+      }
+      if (res.status !== 200) {
+        throw new Error('error');
+      }
+      norevoked++;
+    } catch (err) {
+      console.log('getProtected error : ' + err);
+    }
+  }
+  return { revoked, norevoked };
 }
 
 const tokenadmin = jwt.sign({
@@ -34,98 +87,29 @@ const tokenadmin = jwt.sign({
   "jti": nanoid(),
   "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
   "admin": true
-},
-process.env.JWT_SECRET_KEY,
-{
-  expiresIn: '1h'
-}
+  },
+  process.env.JWT_SECRET_KEY,
+  {
+    expiresIn: '1h'
+  }
 );
 
-console.log('token length : ' +tokens.length);
-
-async function revokeTokens(tokens, tokenadmin) {
-  for (const [index, item] of tokens.entries()) {
-    try {
-      const res = await fetch('http://localhost:3000/revoke', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${tokenadmin}`
-        },
-        body: JSON.stringify({ jti: item.jti })
-      });
-
-      if (res.status !== 200) {
-        throw new Error('error');
-      }
-
-      if (index % 1000 === 0) {
-        console.log('revoke index : ' + index);
-      }
-    } catch (err) {
-      console.log('error : ' + err);
-    }
-  }
-}
-
-await revokeTokens(tokens, tokenadmin)
+const tokens_rev = getTokensData();
+console.log('Start Revokation')
+await revokeTokens(tokens_rev, tokenadmin)
 console.log('Revokation Done')
 
-let countrevoked = 0;
-async function getProtected(tokens) {
-  for (const [index, item] of tokens.entries()) {
-    try {
-      const res = await fetch('http://localhost:3000/protected2', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${item.token}`
-        }
-      });
+console.log('Start get Protected with revoked tokens');
+const {revoked, norevoked} = await getProtected(tokens_rev)
+console.log('get Protected Done with revoked tokens')
+console.log('Revoked : ' + revoked)
+console.log('Not Revoked : ' + norevoked)
 
-      if (res.status !== 200) {
-        throw new Error('error');
-      }
+const tokens_norev = getTokensData();
 
-      if (index % 1000 === 0) {
-        console.log('protected index' + index);
-      }
-    } catch (err) {
-      countrevoked++;
-    }
-  }
-}
+console.log('Start get Protected with available tokens');
+const {revoked: rev, norevoked: norev} = await getProtected(tokens_norev)
+console.log('get Protected Done with available tokens')
+console.log('Revoked : ' + rev)
+console.log('Not Revoked : ' + norev)
 
-await getProtected(tokens)
-console.log('Done')
-console.log('countrevoked : ' + countrevoked);
-
-
-const newtokens = [];
-for (let i = 0; i < NUM_ITEMS; i++) {
-  const jti = nanoid();
-  const token = jwt.sign({
-      "iss": "https://auth.itsme.com",
-      "sub": "1234567890",
-      "aud": "https://api.itsme.com",
-      "name": "John Doe",
-      "jti": jti,
-      "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
-      "admin": false
-    },
-    process.env.JWT_SECRET_KEY,
-    {
-      expiresIn: '1h'
-    }
-  );
-  newtokens.push({token, jti});
-  if (i % 1000 === 0) {
-    console.log(i);
-  }
-}
-console.log('newtoken length : ' +newtokens.length);
-
-countrevoked = 0;
-await getProtected(newtokens)
-console.log('Done')
-console.log('countrevoked ' + countrevoked);
