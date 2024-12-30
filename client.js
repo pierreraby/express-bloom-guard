@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 
+// for naive testing of revocation
+
 const NUM_ITEMS = 10000;
 
 function getTokensData() {
