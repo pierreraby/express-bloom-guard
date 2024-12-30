@@ -4,6 +4,8 @@ import { filterAdd, filterHas } from './bloom-module.js';
 import {performance} from 'perf_hooks';
 import { exit } from 'process';
 
+// No server is needed for this benchmark
+
 function benchJWTVerify() {
   const token = jwt.sign({ foo: 'bar' }, process.env.JWT_SECRET_KEY , { expiresIn: '1h' });
 
@@ -90,8 +92,6 @@ function benchBloomFilter() {
   benchFilterAdd(claims);
   benchFilterHas(claims);
 }
-
-
 
 benchJWTVerify();
 benchBloomFilter();

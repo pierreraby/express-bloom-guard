@@ -12,7 +12,7 @@ let next = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 
 const mutex = new Mutex(); // Create a lock
 
-setInterval(rotate, ROTATE_TIME); // Rotate every 5 minutes
+setInterval(rotate, ROTATE_TIME); // Rotate every 5 minutes for testing although ajust to token life time
 
 async function rotate() {
   const release = await mutex.acquire(); // Acquire a lock for rotation
@@ -33,7 +33,8 @@ export function filterClear() {
 
 export function filterAdd(value) {
   current.add(value) && next.add(value); // No need for a lock
-  eventEmitter.emit('addToDatabase', value); // Emit an event to add the claim to the database
+  //eventEmitter.emit('addToDatabase', value); // Emit an event to add the claim to the database for backup
+  // naive and catastrophic performance hit -> perhaps use a queue to batch insert
 }
 
 export function filterHas(value) {
