@@ -32,8 +32,6 @@ export function filterClear() {
 
 export function filterAdd(value) {
   current.add(value) && next.add(value); // No need for a lock
-  //eventEmitter.emit('addToDatabase', value); // Emit an event to add the claim to the database for backup
-  // naive and catastrophic performance hit -> perhaps use a queue to batch insert
 }
 
 export function filterHas(value) {
