@@ -8,7 +8,8 @@
     "dev": "nodemon --env-file=.env server.js",
     "start": "node --env-file=.env server.js",
     "client": "node --env-file=.env client.js",
-    "bench": "node --env-file=.env benchmarks.js"
+    "bench": "node --env-file=.env benchmarks.js",
+    "memory": "node --env-file=.env bench-memory.js"
   },
   "keywords": [],
   "author": "",
