@@ -1,6 +1,5 @@
 import { BloomFilter } from "bloomfilter";
 import { Mutex } from "async-mutex";
-import { eventEmitter } from "./db-module.js";
 
 const NUM_ITEMS = 1000000;
 const FP_RATE = 0.000000001;
