@@ -4,7 +4,7 @@ Middleware for Express using a BloomFilter to revoke tokens.
 
 This repository is for testing and benchmarking purposes only.  
 
-To launch the server, client, etc., use the command of your favorite package manager, such as  
+To launch the server, client, etc. in the benchmarks directory, use the command of your favorite package manager, such as  
 
 `pnpm run bench`.
 
