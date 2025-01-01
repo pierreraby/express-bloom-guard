@@ -113,6 +113,7 @@ export const checkToken = (tokenType, claim, value) => {
  */
 const handleCheckResponse = (tokenType, claim, value, clientId, responseMessage) => {
   const key = `${tokenType}-${claim}-${value}`;
+  const filterItem = `${claim}-${value}`;
   const check = pendingChecks.get(key);
 
   if (check) {
@@ -124,6 +125,14 @@ const handleCheckResponse = (tokenType, claim, value, clientId, responseMessage)
     }
 
     if (check.receivedResponses === check.expectedResponses) {
+      // Toutes les réponses ont été reçues
+      let inRevoker;
+      if (tokenType === 'access') {
+        inRevoker =accessTokenBloom.filterHas(filterItem);
+      } else if (tokenType === 'refresh') {
+        inRevoker =refreshTokenBloom.filterHas(filterItem);
+      }
+      inRevoker ? check.hits.push('revoker') : check.misses.push('revoker');
       // Résoudre la promesse avec les hits et misses agrégés
       check.resolve({ hits: check.hits, misses: check.misses });
       pendingChecks.delete(key);
