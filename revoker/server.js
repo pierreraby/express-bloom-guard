@@ -19,7 +19,7 @@ app.post('/revoke/:tokenType/:claim/:value', admin, validateRevoke, async (req, 
   }
 
   try {
-    await revokeToken(tokenType, claim, value); // Utilisez await si revokeToken est asynchrone
+    await revokeToken(tokenType, claim, value); 
     res.status(200).json({ message: `${tokenType} token revoked` });
   } catch (error) {
     res.status(500).json({ message: `Error : ${error.message}` });
