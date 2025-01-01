@@ -72,28 +72,6 @@ export function initGrpcClient() {
             console.error('Error sending response:', error);
           });
       }
-      
-      // Supprimez ce bloc si 'ckeck' n'est plus utilisé
-      /*
-      if (action === 'ckeck') {
-        let found;
-        if (tokenType === 'access') {
-          found = accessTokenBloom.filterHas(filterItem);
-          // console.log(`Access Token found : ${filterItem}`);
-        } else if (tokenType === 'refresh') {
-          found = refreshTokenBloom.filterHas(filterItem);
-          // console.log(`Refresh Token found: ${filterItem}`);
-        }
-        const responseMessage = found ? 'true' : 'false';
-        sendResponse(tokenType, claim, value, responseMessage)
-          .then((success) => {
-            console.log(`Response sent: ${success}`);
-          })
-          .catch((error) => {
-            console.error('Error sending response:', error);
-          });
-      }
-      */
     });
 
     call.on('end', () => {
@@ -115,9 +93,17 @@ export function initGrpcClient() {
   grpcClientInitialized = true;
 }
 
+const CLIENT_ID = process.env. CLIENT_ID; // Remplacez par un identifiant unique pour chaque instance
+
 export const sendResponse = (tokenType, claim, value, responseMessage) => {
   return new Promise((resolve, reject) => {
-    client.SendResponse({ tokenType, claim, value, responseMessage }, (error, response) => {
+    client.SendResponse({ 
+      clientId: CLIENT_ID,              // Ajout de clientId
+      tokenType, 
+      claim, 
+      value, 
+      responseMessage 
+    }, (error, response) => {
       if (error) {
         console.error('SendResponse Error:', error);
         return reject(error);

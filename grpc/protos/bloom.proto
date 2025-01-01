@@ -20,10 +20,11 @@ message BloomUpdate {
 }
 
 message ClientResponse {
-  string tokenType = 1;
-  string claim = 2;
-  string value = 3;
-  string responseMessage = 4;
+  string clientId = 1;        // Ajout de l'identifiant du client
+  string tokenType = 2;
+  string claim = 3;
+  string value = 4;
+  string responseMessage = 5;
 }
 
 message SendResponseAck {

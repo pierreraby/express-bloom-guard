@@ -8,7 +8,7 @@ import { admin } from './middlewares/auth.js';
 
 
 const app = express();
-const port = process.env.PORT || 3001; // Changez le port pour éviter le conflit
+const port = process.env.PORT || 3000; // Changez le port pour éviter le conflit
 
 app.use(express.json());
 
@@ -30,7 +30,7 @@ app.get('/check/:tokenType/:claim/:value', admin, validateCheck, async (req, res
   const { tokenType, claim, value } = req.params;
   try {
     const result = await checkToken(tokenType, claim, value);
-    res.status(200).json({ message: result });
+    res.status(200).json(result); // Renvoie {"hits": [...], "misses": [...]}
   } catch (error) {
     res.status(500).json({ message: `Error: ${error.message}` });
   }

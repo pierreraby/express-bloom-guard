@@ -12,8 +12,8 @@
     "memory": "node --env-file=.env ./benchmarks/bench-memory.js",
     "revoker": "PORT=4000 nodemon --env-file=.env ./revoker/server.js",
     "revoker-client": "node --env-file=.env ./revoker/client.js",
-    "server1": "PORT=4001 nodemon --env-file=.env ./api-server/server.js",
-    "server2": "PORT=4002 nodemon --env-file=.env ./api-server/server.js",
+    "server1": "PORT=4001 CLIENT_ID=1 nodemon --env-file=.env ./api-server/server.js",
+    "server2": "PORT=4002 CLIENT_ID=2 nodemon --env-file=.env ./api-server/server.js",
     "api-clients": " node --env-file=.env ./api-server/client.js"
   },
   "keywords": [],

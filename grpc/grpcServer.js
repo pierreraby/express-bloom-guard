@@ -91,7 +91,8 @@ export const checkToken = (tokenType, claim, value) => {
     pendingChecks.set(key, {
       expectedResponses,
       receivedResponses: 0,
-      results: [],
+      hits: [],
+      misses: [],
       resolve,
       reject,
     });
@@ -110,18 +111,21 @@ export const checkToken = (tokenType, claim, value) => {
 /**
  * Handles responses from the client and resolves the corresponding promises when all responses are received.
  */
-const handleCheckResponse = (tokenType, claim, value, responseMessage) => {
+const handleCheckResponse = (tokenType, claim, value, clientId, responseMessage) => {
   const key = `${tokenType}-${claim}-${value}`;
   const check = pendingChecks.get(key);
 
   if (check) {
     check.receivedResponses += 1;
-    check.results.push(responseMessage);
+    if (responseMessage.toLowerCase() === 'true') {
+      check.hits.push(clientId);
+    } else {
+      check.misses.push(clientId);
+    }
 
     if (check.receivedResponses === check.expectedResponses) {
-      // Agréger les résultats (exemple: retourner 'true' si au moins une réponse est 'true')
-      const aggregatedResult = check.results.includes('true');
-      check.resolve(aggregatedResult);
+      // Résoudre la promesse avec les hits et misses agrégés
+      check.resolve({ hits: check.hits, misses: check.misses });
       pendingChecks.delete(key);
     }
   } else {
@@ -129,14 +133,13 @@ const handleCheckResponse = (tokenType, claim, value, responseMessage) => {
   }
 };
 
-
 const sendResponseHandler = (call, callback) => {
-  const { tokenType, claim, value, responseMessage } = call.request;
-  console.log(`Received response from client: tokenType=${tokenType}, claim=${claim}, value=${value}, message=${responseMessage}`);
+  const { tokenType, claim, value, responseMessage, clientId } = call.request;
+  console.log(`Received response from client: tokenType=${tokenType}, claim=${claim}, value=${value}, message=${responseMessage}, clientId=${clientId}`);
 
   try {
     // Résoudre la promesse correspondante à la vérification du token
-    handleCheckResponse(tokenType, claim, value, responseMessage);
+    handleCheckResponse(tokenType, claim, value, clientId, responseMessage);
     console.log('handleCheckResponse executed successfully');
 
     // Appeler le callback pour envoyer la réponse au client
