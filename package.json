@@ -9,16 +9,24 @@
     "start": "node --env-file=.env ./benchmarks/server.js",
     "client": "node --env-file=.env ./benchmarks/client.js",
     "bench": "node --env-file=.env ./benchmarks/benchmarks.js",
-    "memory": "node --env-file=.env ./benchmarks/bench-memory.js"
+    "memory": "node --env-file=.env ./benchmarks/bench-memory.js",
+    "revoker": "PORT=4000 nodemon --env-file=.env ./revoker/server.js",
+    "revoker-client": "node --env-file=.env ./revoker/client.js",
+    "server1": "PORT=4001 nodemon --env-file=.env ./api-server/server.js",
+    "server2": "PORT=4002 nodemon --env-file=.env ./api-server/server.js",
+    "api-clients": " node --env-file=.env ./api-server/client.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@grpc/grpc-js": "^1.12.5",
+    "@grpc/proto-loader": "^0.7.13",
     "@libsql/client": "^0.14.0",
     "async-mutex": "^0.5.0",
     "bloomfilter": "^0.0.21",
     "express": "^4.21.2",
+    "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.0.9"
   },

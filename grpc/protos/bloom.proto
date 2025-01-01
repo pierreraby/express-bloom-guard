@@ -1,0 +1,32 @@
+// bloom.proto
+syntax = "proto3";
+
+package bloom;
+
+service BloomService {
+  // Streaming method to send Bloom filter updates
+  rpc SubscribeUpdates(SubscribeRequest) returns (stream BloomUpdate);
+  rpc SendResponse(ClientResponse) returns (SendResponseAck);
+}
+
+message SubscribeRequest {
+  string tokenType = 1; // 'access' or 'refresh'
+}
+
+message BloomUpdate {
+  string action = 1; // 'add' or 'check, etc ...'
+  string claim = 2;
+  string value = 3;
+}
+
+message ClientResponse {
+  string tokenType = 1;
+  string claim = 2;
+  string value = 3;
+  string responseMessage = 4;
+}
+
+message SendResponseAck {
+  bool success = 1;
+  string message = 2;
+}
