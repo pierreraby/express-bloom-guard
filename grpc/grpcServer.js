@@ -84,7 +84,7 @@ export const checkToken = (tokenType, claim, value) => {
 
   return new Promise((resolve, reject) => {
     if (expectedResponses === 0) {
-      // Aucun abonné pour ce tokenType
+      // No subscribers for this tokenType
       return reject(new Error('No subscribers available for this tokenType'));
     }
 
@@ -97,14 +97,14 @@ export const checkToken = (tokenType, claim, value) => {
       reject,
     });
 
-    // Timeout pour rejeter la promesse si les réponses ne sont pas reçues
+    // Timeout to reject the promise if responses are not received
     setTimeout(() => {
       if (pendingChecks.has(key)) {
         const check = pendingChecks.get(key);
         pendingChecks.delete(key);
         check.reject(new Error('Timeout waiting for responses'));
       }
-    }, 5000); // Timeout de 5 secondes
+    }, 5000); // 5 seconds timeout
   });
 };
 
@@ -125,15 +125,15 @@ const handleCheckResponse = (tokenType, claim, value, clientId, responseMessage)
     }
 
     if (check.receivedResponses === check.expectedResponses) {
-      // Toutes les réponses ont été reçues
+      // All responses have been received
       let inRevoker;
       if (tokenType === 'access') {
-        inRevoker =accessTokenBloom.filterHas(filterItem);
+        inRevoker = accessTokenBloom.filterHas(filterItem);
       } else if (tokenType === 'refresh') {
-        inRevoker =refreshTokenBloom.filterHas(filterItem);
+        inRevoker = refreshTokenBloom.filterHas(filterItem);
       }
       inRevoker ? check.hits.push('revoker') : check.misses.push('revoker');
-      // Résoudre la promesse avec les hits et misses agrégés
+      // Resolve the promise with the aggregated hits and misses
       check.resolve({ hits: check.hits, misses: check.misses });
       pendingChecks.delete(key);
     }
@@ -147,26 +147,26 @@ const sendResponseHandler = (call, callback) => {
   console.log(`Received response from client: tokenType=${tokenType}, claim=${claim}, value=${value}, message=${responseMessage}, clientId=${clientId}`);
 
   try {
-    // Résoudre la promesse correspondante à la vérification du token
+    // Resolve the promise corresponding to the token check
     handleCheckResponse(tokenType, claim, value, clientId, responseMessage);
     console.log('handleCheckResponse executed successfully');
 
-    // Appeler le callback pour envoyer la réponse au client
+    // Call the callback to send the response to the client
     callback(null, { success: true, message: 'Response received successfully' });
     console.log('sendResponseHandler: Callback executed successfully');
   } catch (error) {
     console.error('sendResponseHandler Error:', error);
-    callback(error, null); // Envoyer l'erreur au client si une exception survient
+    callback(error, null); // Send the error to the client if an exception occurs
   }
 };
 
 // gRPC service
 const BloomService = {
   SubscribeUpdates: subscribeUpdates,
-  SendResponse: sendResponseHandler, // Ajout de la nouvelle méthode
+  SendResponse: sendResponseHandler, // Adding the new method
 };
 
-// Démarrage du serveur gRPC
+// Starting the gRPC server
 export const grpcServer = new grpc.Server();
 grpcServer.addService(bloomProto.BloomService.service, BloomService);
 grpcServer.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), (err, port) => {

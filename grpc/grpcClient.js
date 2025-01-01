@@ -93,12 +93,12 @@ export function initGrpcClient() {
   grpcClientInitialized = true;
 }
 
-const CLIENT_ID = process.env. CLIENT_ID; // Remplacez par un identifiant unique pour chaque instance
+const CLIENT_ID = process.env. CLIENT_ID; 
 
 export const sendResponse = (tokenType, claim, value, responseMessage) => {
   return new Promise((resolve, reject) => {
     client.SendResponse({ 
-      clientId: CLIENT_ID,              // Ajout de clientId
+      clientId: CLIENT_ID,
       tokenType, 
       claim, 
       value, 

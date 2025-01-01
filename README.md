@@ -6,7 +6,10 @@ This repository is for testing and benchmarking purposes only.
 
 To launch the server, client, etc. in the benchmarks directory, use the command of your favorite package manager, such as  
 
-`pnpm run bench`.
+`pnpm run bench`. see package.json scripts
+
+The revoker and its API server clients centralize token management.
+IMPLEMENTATION IN PROGRESS
 
 ## The Tiny "Pizza & Caffeine" License
 
