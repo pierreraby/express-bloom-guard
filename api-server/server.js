@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;;
 app.use(express.json());
 
 // jti: revoke a device user session
-// fam: revoke all device user sessions -> change family uuid claim when reconnecting
+// fam: revoke all device user sessions -> change family UUID claim when reconnecting
 // sub: you are fired !!!
 // admin: you are not an admin anymore
 
