@@ -56,22 +56,6 @@ app.post('/addInstance/', admin, (req, res) => {
   
 });
 
-// app.get('/sendResponse/:tokenType/:claim/:value', admin, async (req, res) => {
-//   const { tokenType, claim, value } = req.params;
-//   const { responseMessage } = req.body; // Assume que le message est envoyé dans le corps de la requête
-
-//   try {
-//     const success = await sendResponse(tokenType, claim, value, responseMessage);
-//     if (success) {
-//       res.status(200).json({ message: 'Response sent successfully' });
-//     } else {
-//       res.status(500).json({ message: 'Failed to send response' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: `Error: ${error.message}` });
-//   }
-// });
-
 app.get('/health', (req, res) => {
   res.status(200).json({ message: 'Server is running' });
 });
