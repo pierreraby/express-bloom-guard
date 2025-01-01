@@ -3,7 +3,6 @@ import process from "process";
 
 const NUM_ITEMS = 1000000;
 const FP_RATE = 0.000000001;
-const ROTATE_TIME = 1000 * 60 * 5; // 5 minutes
 
 const start = process.memoryUsage();
 console.log('Memory usage before module execution:', {
@@ -32,7 +31,7 @@ console.log('rss diff:', ((step1.rss - start.rss) / 1024 / 1024).toFixed(2) + ' 
 console.log('heapTotal diff:', ((step1.heapTotal - start.heapTotal) / 1024 / 1024).toFixed(2) + ' MB');
 console.log('heapUsed diff:', ((step1.heapUsed - start.heapUsed) / 1024 / 1024).toFixed(2) + ' MB');
 console.log('external diff:', ((step1.external - start.external) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('arrayBuffers diff:', ((step1.arrayBuffers - start.arrayBuffers) / 1024 / 1024).toFixed(2) + ' MB');
+console.log('arrayBuffers diff:', ((step1.arrayBuffers - start.arrayBuffers) / 1024 / 1024).toFixed(2) + ' MB \n');
 
 for (let i = 0; i < 1000000; i++) {
   previous.add('jti-' + i);
