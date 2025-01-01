@@ -206,4 +206,5 @@ exit(0); // Exit the process because filter rotation is on a timer
 
 // The false positive rate is 0, which is expected because the test claims are not in the filter.
 // This is a good indication that the Bloom filter is working as expected.
-// The benchmark took approximately 20 minutes to complete.
+// The benchmark took approximately 20 minutes to complete on my old laptop.
+// Just too lazy to implement multithreaded claim generation.
