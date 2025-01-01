@@ -3,7 +3,7 @@
 import jwt from "jsonwebtoken";
 
 const adminToken = jwt.sign({
-  admin: 'yes',
+  admin: '987654321-1234567890',
   sub: '1234567890',
   fam: '1234567890',
   jti: '1234567890',
