@@ -17,7 +17,6 @@ function getTokensData() {
         "name": "John Doe",
         "jti": jti,
         "fam": "e7b8a1d4-3f6b-4d3b-8b3d-7f43f7b6f4e3",
-        "admin": "9876541231-123456789"
       },
       process.env.JWT_SECRET_KEY,
       {
@@ -46,10 +45,10 @@ async function revokeTokens(tokensData, tokenadmin) {
       });
 
       if (res.status !== 200) {
-        throw new Error('error');
+        throw new Error(`${res.status} ${res.statusText}`);
       }
     } catch (err) {
-      console.log('revocation error : ' + err);
+      console.log('revocation -> ' + err);
     }
   }
 }
