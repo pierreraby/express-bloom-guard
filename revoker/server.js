@@ -64,7 +64,7 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-// Gestionnaire d'arrêt pour nettoyer les rotations
+// Shutdown handler to clean up rotations
 process.on('SIGINT', () => {
   console.log('Shutting down server...');
   accessTokenBloom.stopRotation();
