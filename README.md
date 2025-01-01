@@ -9,6 +9,7 @@ To launch the server, client, etc. in the benchmarks directory, use the command 
 `pnpm run bench`. see package.json scripts
 
 The revoker and its API server clients centralize token management.
+This is a POC for testing purposes only and to have fun coding it 😉.
 IMPLEMENTATION IN PROGRESS
 
 ## The Tiny "Pizza & Caffeine" License
