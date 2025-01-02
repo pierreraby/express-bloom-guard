@@ -34,12 +34,8 @@ export class ClaimsManager {
    * Resets all claim to check.
    */
   resetClaim() {
-    if (!this.claims[claim]) {
-      throw new Error(`The claim "${claim}" does not exist.`);
-    }
-    // Remove all claims
     this.claims = [];
-    console.log(`Claim "${claim}" cleared.`);
+    console.log("All claims have been cleared.");
   }
 
   /**
