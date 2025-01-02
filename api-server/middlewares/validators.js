@@ -4,10 +4,12 @@ import { param, validationResult } from 'express-validator';
 export const validateRevoke = [
   param('claim')
     .isString().withMessage('Claim must be a string.')
-    .isLength({ min: 3, max: 36 }).withMessage('Claim must be between 3 and 36 characters long.'),
+    .isLength({ min: 3, max: 36 }).withMessage('Claim must be between 3 and 36 characters long.')
+    .escape(), // Escape the claim parameter
   param('value')
     .isString().withMessage('Value must be a string.')
-    .isLength({ min: 3, max: 50 }).withMessage('Value must be between 3 and 50 characters long.'),
+    .isLength({ min: 3, max: 50 }).withMessage('Value must be between 3 and 50 characters long.')
+    .escape(), // Escape the value parameter
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -21,10 +23,12 @@ export const validateRevoke = [
 export const validateCheck = [
   param('claim')
     .isString().withMessage('Claim must be a string.')
-    .isLength({ min: 3, max: 36 }).withMessage('Claim must be between 3 and 36 characters long.'),
+    .isLength({ min: 3, max: 36 }).withMessage('Claim must be between 3 and 36 characters long.')
+    .escape(), // Escape the claim parameter
   param('value')
     .isString().withMessage('Value must be a string.')
-    .isLength({ min: 3, max: 50 }).withMessage('Value must be between 3 and 50 characters long.'),
+    .isLength({ min: 3, max: 50 }).withMessage('Value must be between 3 and 50 characters long.')
+    .escape(), // Escape the value parameter
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,7 +42,8 @@ export const validateCheck = [
 export const validateAddClaim = [
   param('claim')
     .isString().withMessage('Claim must be a string.')
-    .isLength({ min: 3, max: 36 }).withMessage('Claim must be between 3 and 36 characters long.'),
+    .isLength({ min: 3, max: 36 }).withMessage('Claim must be between 3 and 36 characters long.')
+    .escape(), // Escape the claim parameter
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
