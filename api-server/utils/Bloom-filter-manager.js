@@ -3,6 +3,8 @@ import { BloomFilter } from 'bloomfilter';
 
 // Default configuration (can be overridden during instantiation)
 const DEFAULT_ROTATE_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds for testing purposes
+const DEFAULT_NUM_ITEMS = 1000000; // 1 million items
+const DEFAULT_FP_RATE = 0.000001; // 1e-6
 
 export class BloomFilterManager {
   /**
@@ -12,7 +14,7 @@ export class BloomFilterManager {
    * @param {number} options.fpRate - Target false positive rate.
    * @param {number} options.rotateTime - Filter rotation interval in ms.
    */
-  constructor({ numItems, fpRate, rotateTime = DEFAULT_ROTATE_TIME }) {
+  constructor({ numItems = DEFAULT_NUM_ITEMS, fpRate = DEFAULT_FP_RATE, rotateTime = DEFAULT_ROTATE_TIME }) {
     this.numItems = numItems;
     this.fpRate = fpRate;
     this.rotateTime = rotateTime;

@@ -1,5 +1,5 @@
-import { BloomFilterManager } from "./Bloom-filter-manager.js.js";
-import { ClaimsManager } from "./ClaimsManager.js";
+import { BloomFilterManager } from "./Bloom-filter-manager.js";
+import { ClaimsManager } from "./Claims-manager.js";
 
 // We can now use the Bloom filter manager to add and check different tokens.
 

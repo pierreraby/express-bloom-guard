@@ -1,4 +1,4 @@
-import { BloomFilterManager } from "../utils/Bloom-filter-manager.js.js";
+import { BloomFilterManager } from "../utils/Bloom-filter-manager.js";
 
 /**
  * Middleware factory to check claims with the Bloom filter.

@@ -2,7 +2,7 @@
 
 export class ClaimsManager {
   constructor() {
-    this.claims = [];
+    this.claims = ['jti', 'fam', 'sub', 'admin']; // Default claims
   }
 
   /**

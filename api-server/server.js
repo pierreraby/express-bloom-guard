@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Claims to check in the middleware for all types of tokens
 const accessClaimsToCheck = ['jti', 'fam', 'sub', 'admin'];
-const refreshClaimsToCheck = ['jti', 'sub', 'admin'];
+const refreshClaimsToCheck = ['jti', 'fam','sub', 'admin'];
 
 // Create middlewares to check the claims for access and refresh tokens
 const checkAccessRevoc = createBloomMiddleware(accessClaimsToCheck, accessTokenBloom);
