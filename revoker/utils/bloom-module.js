@@ -1,4 +1,4 @@
-import { BloomFilterManager } from "./BloomFilterManager.js";
+import { BloomFilterManager } from "./Bloom-filter-manager.js";
 
 // We can now use the Bloom filter manager to add and check different tokens.
 
