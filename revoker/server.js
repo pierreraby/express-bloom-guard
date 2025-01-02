@@ -1,7 +1,7 @@
 // revoker server.js
 import express from 'express';
-import { revokeToken, checkToken} from '../grpc/grpcServer.js';
-import { grpcServer } from '../grpc/grpcServer.js';
+import { revokeToken, checkToken} from '../grpc/grpc-server.js';
+import { grpcServer } from '../grpc/grpc-server.js';
 import { validateRevoke, validateCheck, validateAddClaim } from './middlewares/validators.js';
 import { accessTokenBloom, refreshTokenBloom } from './utils/bloom-module.js';
 import { admin } from './middlewares/auth.js';
