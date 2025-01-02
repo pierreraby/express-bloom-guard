@@ -19,6 +19,8 @@ export class BloomFilterManager {
 
     this.mutex = new Mutex(); // Create a lock
 
+    console.log(`Initializing BloomFilterManager with numItems=${numItems}, fpRate=${fpRate}, rotateTime=${rotateTime}`);
+
     // Initialize the filters
     this.filterClear();
 

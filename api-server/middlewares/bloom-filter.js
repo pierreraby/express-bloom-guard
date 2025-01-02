@@ -1,3 +1,5 @@
+import { BloomFilterManager } from "../utils/bloom-filter-manager.js";
+
 /**
  * Middleware factory to check claims with the Bloom filter.
  * @param {Array<string>} claimsToCheck - List of claims to check.
