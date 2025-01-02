@@ -2,7 +2,7 @@ import express from 'express';
 import { auth } from './middlewares/auth.js';
 import { accessTokenBloom, refreshTokenBloom } from './utils/bloom-module.js';
 import { createBloomMiddleware } from './middlewares/bloom-filter.js';
-import { initGrpcClient } from '../grpc/grpcClient.js';
+import { initGrpcClient } from '../grpc/grpc-client.js';
 
 const app = express();
 const port = process.env.PORT || 3000;;
