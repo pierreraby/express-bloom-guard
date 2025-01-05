@@ -183,8 +183,8 @@ function benchBloomFilter() {
 const NUM_TOKENS = 10000;
 const FP_RATE = 0.00001; // 1e-5
 
-// benchJWTVerify(NUM_TOKENS);
-// benchBloomFilter();
+benchJWTVerify(NUM_TOKENS);
+benchBloomFilter();
 benchFalsePositiveRate(FP_RATE);
 
 exit(0); // Exit the process because filter rotation is on a timer
