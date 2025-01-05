@@ -1,7 +1,7 @@
 import { BloomFilter } from "bloomfilter";
 import process from "process";
 
-// const NUM_ITEMS = 1000000000; // 1 billion items
+// const NUM_ITEMS = 100000000; // 100 million items
 // const FP_RATE = 0.000000001; // 1e-9
 
 const NUM_ITEMS = 1000000;  // 1 million items
