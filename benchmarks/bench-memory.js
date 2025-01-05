@@ -47,11 +47,6 @@ console.log('Estimation de la mémoire utilisée par les filtres de Bloom :', {
   perFilter: `${((step1.external + step1.arrayBuffers) / 3 / 1024 / 1024).toFixed(2)} MB`
 });
 
-// daemonize the process
-setInterval(() => {
-  console.log('Running...');
-}, 1000);
-
 /*
 Due to this implementation, adding items in the Bloom filter
 does not affect the memory by the process.
