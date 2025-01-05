@@ -1,10 +1,10 @@
 import { BloomFilter } from "bloomfilter";
 import process from "process";
 
-const NUM_ITEMS = 100000000; // 100 million items
+// const NUM_ITEMS = 100000000; // 100 million items
 const FP_RATE = 0.000000001; // 1e-9
 
-// const NUM_ITEMS = 1000000;  // 1 million items
+const NUM_ITEMS = 1000000;  // 1 million items
 // const FP_RATE = 0.000001; // 1e-6
 
 function logMemoryUsage(memoryUsage) {
@@ -42,10 +42,19 @@ console.log('Memory usage after initialization:');
 logMemoryUsage(end);
 logMemoryDiff(start, end);
 
-console.log('Estimation de la mémoire utilisée par les filtres de Bloom :', {
-  total: `${(( end.external - start.external) / 1024 / 1024).toFixed(2)} MB`,
-  perFilter: `${((end.external - start.external) / 3 / 1024 / 1024).toFixed(2)} MB`
-});
+console.log('Estimated memory used by Bloom filters:');
+console.log('total:', `${((end.external - start.external) / 1024 / 1024).toFixed(2)} MB`);
+console.log('per filter:', `${((end.external - start.external) / 3 / 1024 / 1024).toFixed(2)} MB`);
+console.log('************************************************');
+
+// calculate the theorical memory used by the Bloom filter
+const bits = Math.ceil(-NUM_ITEMS * Math.log2(FP_RATE) / Math.LN2); // number of bits
+const theoreticalMemory = bits / 8 / 1024 / 1024;
+
+console.log('Theoretical memory used by Bloom filter with this setup :');
+console.log('NUM_ITEMS:', NUM_ITEMS);
+console.log('FP_RATE:', FP_RATE);
+console.log('Memory:', `${theoreticalMemory.toFixed(2)} MB`);
 
 /*
 Due to this implementation, adding items in the Bloom filter
