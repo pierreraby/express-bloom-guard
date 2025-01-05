@@ -1,11 +1,11 @@
 import { BloomFilter } from "bloomfilter";
 import process from "process";
 
-// const NUM_ITEMS = 100000000; // 100 million items
-// const FP_RATE = 0.000000001; // 1e-9
+const NUM_ITEMS = 100000000; // 100 million items
+const FP_RATE = 0.000000001; // 1e-9
 
-const NUM_ITEMS = 1000000;  // 1 million items
-const FP_RATE = 0.000001; // 1e-6
+// const NUM_ITEMS = 1000000;  // 1 million items
+// const FP_RATE = 0.000001; // 1e-6
 
 function logMemoryUsage(memoryUsage) {
   console.log('Utilisation de la mémoire :', {
@@ -37,14 +37,14 @@ let previous = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 let current = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 let next = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 
-const step1 = process.memoryUsage();
+const end = process.memoryUsage();
 console.log('Memory usage after initialization:');
-logMemoryUsage(step1);
-logMemoryDiff(start, step1);
+logMemoryUsage(end);
+logMemoryDiff(start, end);
 
 console.log('Estimation de la mémoire utilisée par les filtres de Bloom :', {
-  total: `${((step1.external) / 1024 / 1024).toFixed(2)} MB`,
-  perFilter: `${((step1.external) / 3 / 1024 / 1024).toFixed(2)} MB`
+  total: `${(( end.external - start.external) / 1024 / 1024).toFixed(2)} MB`,
+  perFilter: `${((end.external - start.external) / 3 / 1024 / 1024).toFixed(2)} MB`
 });
 
 /*
