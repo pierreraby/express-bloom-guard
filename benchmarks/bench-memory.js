@@ -43,8 +43,8 @@ logMemoryUsage(step1);
 logMemoryDiff(start, step1);
 
 console.log('Estimation de la mémoire utilisée par les filtres de Bloom :', {
-  total: `${((step1.external + step1.arrayBuffers) / 1024 / 1024).toFixed(2)} MB`,
-  perFilter: `${((step1.external + step1.arrayBuffers) / 3 / 1024 / 1024).toFixed(2)} MB`
+  total: `${((step1.external) / 1024 / 1024).toFixed(2)} MB`,
+  perFilter: `${((step1.external) / 3 / 1024 / 1024).toFixed(2)} MB`
 });
 
 /*
