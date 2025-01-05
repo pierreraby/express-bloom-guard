@@ -170,6 +170,7 @@ function benchFalsePositiveRate(fp_rate) {
   console.log(`Time taken for FPR benchmark: ${(endTime - startTime).toFixed(2)} milliseconds`);
   console.log(`False positives: ${falsePositives} for ${totalChecks} checks`);
   console.log(`False positive rate: ${falsePositiveRate}`);
+  console.log(`Expected false positive rate: ${fp_rate}`);
 }
 
 function benchBloomFilter() {
