@@ -1,62 +1,60 @@
 import { BloomFilter } from "bloomfilter";
 import process from "process";
 
-const NUM_ITEMS = 1000000;
-const FP_RATE = 0.000000001;
+const NUM_ITEMS = 1000000000; // 1 billion items
+const FP_RATE = 0.000000001; // 1e-9
+
+// const NUM_ITEMS = 1000000;  // 1 million items
+// const FP_RATE = 0.000001; // 1e-6
+
+function logMemoryUsage(memoryUsage) {
+  console.log('Utilisation de la mémoire :', {
+    rss: `${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`,
+    heapTotal: `${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`,
+    heapUsed: `${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`,
+    external: `${(memoryUsage.external / 1024 / 1024).toFixed(2)} MB`,
+    arrayBuffers: `${(memoryUsage.arrayBuffers / 1024 / 1024).toFixed(2)} MB`
+  });
+  console.log('************************************************');
+  }
+
+  function logMemoryDiff(memorystart, memoryend) {
+    console.log('Différence d\'utilisation de la mémoire :', {
+    rss: `${((memoryend.rss - memorystart.rss) / 1024 / 1024).toFixed(2)} MB`,
+    heapTotal: `${((memoryend.heapTotal - memorystart.heapTotal) / 1024 / 1024).toFixed(2)} MB`,
+    heapUsed: `${((memoryend.heapUsed - memorystart.heapUsed) / 1024 / 1024).toFixed(2)} MB`,
+    external: `${((memoryend.external - memorystart.external) / 1024 / 1024).toFixed(2)} MB`,
+    arrayBuffers: `${((memoryend.arrayBuffers - memorystart.arrayBuffers) / 1024 / 1024).toFixed(2)} MB`
+    });
+    console.log('************************************************');
+  }
 
 const start = process.memoryUsage();
-console.log('Memory usage before module execution:', {
-  rss: (start.rss / 1024 / 1024).toFixed(2) + ' MB',
-  heapTotal: (start.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
-  heapUsed: (start.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
-  external: (start.external / 1024 / 1024).toFixed(2) + ' MB',
-  arrayBuffers: (start.arrayBuffers / 1024 / 1024).toFixed(2) + ' MB'
-});
+console.log('Memory usage before initialization:');
+logMemoryUsage(start);
 
 let previous = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 let current = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 let next = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
 
 const step1 = process.memoryUsage();
-console.log('Memory usage after initialization:', {
-  rss: (step1.rss / 1024 / 1024).toFixed(2) + ' MB',
-  heapTotal: (step1.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
-  heapUsed: (step1.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
-  external: (step1.external / 1024 / 1024).toFixed(2) + ' MB',
-  arrayBuffers: (step1.arrayBuffers / 1024 / 1024).toFixed(2) + ' MB'
+console.log('Memory usage after initialization:');
+logMemoryUsage(step1);
+logMemoryDiff(start, step1);
+
+console.log('Estimation de la mémoire utilisée par les filtres de Bloom :', {
+  total: `${((step1.external + step1.arrayBuffers) / 1024 / 1024).toFixed(2)} MB`,
+  perFilter: `${((step1.external + step1.arrayBuffers) / 3 / 1024 / 1024).toFixed(2)} MB`
 });
 
-console.log('******* diff *******');
-console.log('rss diff:', ((step1.rss - start.rss) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('heapTotal diff:', ((step1.heapTotal - start.heapTotal) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('heapUsed diff:', ((step1.heapUsed - start.heapUsed) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('external diff:', ((step1.external - start.external) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('arrayBuffers diff:', ((step1.arrayBuffers - start.arrayBuffers) / 1024 / 1024).toFixed(2) + ' MB \n');
-
-for (let i = 0; i < 1000000; i++) {
-  previous.add('jti-' + i);
-  current.add('jti-' + i);
-  next.add('jti-' + i);
-}
-const end = process.memoryUsage();
-console.log('Memory usage after adding 1,000,000 tokens:', {
-  rss: (end.rss / 1024 / 1024).toFixed(2) + ' MB',
-  heapTotal: (end.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
-  heapUsed: (end.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
-  external: (end.external / 1024 / 1024).toFixed(2) + ' MB',
-  arrayBuffers: (end.arrayBuffers / 1024 / 1024).toFixed(2) + ' MB'
-});
-
-console.log('******* diff *******');
-console.log('rss diff:', ((end.rss - step1.rss) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('heapTotal diff:', ((end.heapTotal - step1.heapTotal) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('heapUsed diff:', ((end.heapUsed - step1.heapUsed) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('external diff:', ((end.external - step1.external) / 1024 / 1024).toFixed(2) + ' MB');
-console.log('arrayBuffers diff:', ((end.arrayBuffers - step1.arrayBuffers) / 1024 / 1024).toFixed(2) + ' MB');
+// daemonize the process
+setInterval(() => {
+  console.log('Running...');
+}, 1000);
 
 /*
-Adding items does not affect external memory and arrayBuffers,
-which is consistent with the BloomFilter implementation.
+Due to this implementation, adding items in the Bloom filter
+does not affect the memory by the process.
 
 ### Analysis of Results
 
@@ -77,17 +75,19 @@ which is consistent with the BloomFilter implementation.
 
 ### Memory Used by Bloom Filters
 
-- Total Memory Increase:
-  - external + arrayBuffers = 15.43 MB + 15.43 MB = 30.86 MB
+- Memory Increase:
+  arrayBuffers is included in external memory too.
+  external memory increased by 15.43 MB after the initialization of the filters.
+
 
 - Memory per Bloom Filter:
   - We have 3 Bloom filters (previous, current, next).
-  - Memory per filter ≈ 30.86 MB / 3 ≈ 10.29 MB per filter.
+  - Memory per filter ≈ 15.44 MB / 3 ≈ 5.15 MB per filter.
 
 ### Conclusion
 
-The three Bloom filters together consume approximately 30.86 MB of memory,
-which corresponds to about 10.29 MB per Bloom filter. This estimate
+The three Bloom filters together consume approximately 15.44 MB of memory,
+which corresponds to about 5.14 MB per Bloom filter. This estimate
 is based on the increase in external memory and arrayBuffers
 after the initialization of the filters.
 
@@ -96,6 +96,6 @@ after the initialization of the filters.
 The individual size of a Bloom filter depends on the parameters NUM_ITEMS
 and FP_RATE. With NUM_ITEMS = 1,000,000 and FP_RATE = 1e-9, the theoretically
 estimated memory for each filter is about 5.14 MB. However,
-this implementation shows a usage of ~10 MB per filter, which
-may be due to overheads related to the implementation or internal optimizations.
+this implementation shows a usage of 5.14 MB per filter, which is close to the
+theoretical estimate.
 */
