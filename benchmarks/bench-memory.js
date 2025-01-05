@@ -1,11 +1,11 @@
 import { BloomFilter } from "bloomfilter";
 import process from "process";
 
-const NUM_ITEMS = 1000000000; // 1 billion items
-const FP_RATE = 0.000000001; // 1e-9
+// const NUM_ITEMS = 1000000000; // 1 billion items
+// const FP_RATE = 0.000000001; // 1e-9
 
-// const NUM_ITEMS = 1000000;  // 1 million items
-// const FP_RATE = 0.000001; // 1e-6
+const NUM_ITEMS = 1000000;  // 1 million items
+const FP_RATE = 0.000001; // 1e-6
 
 function logMemoryUsage(memoryUsage) {
   console.log('Utilisation de la mémoire :', {
