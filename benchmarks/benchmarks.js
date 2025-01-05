@@ -1,22 +1,18 @@
 import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
-import { filterAdd, filterHas, filterClear} from './bloom-module.js';
+import { filterAdd, filterHas, setFpRate} from './bloom-module.js';
 import {performance} from 'perf_hooks';
 import { exit } from 'process';
 
 // No server is needed for this benchmark
 
-// Generate 10,000 tokens (avoid V8 optimizations with JIT)
-const NUM_TOKENS = 10000;
-
-console.log('Generating JWT tokens...');
-const tokens = Array.from({ length: NUM_TOKENS }, () => 
-  jwt.sign({ foo: 'bar' }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
-);
-
 function benchJWTVerify(iterations) {
-  console.log('Starting jwt verify benchmark...');
+  console.log('Generating JWT tokens...');
+  const tokens = Array.from({ length: NUM_TOKENS }, () => 
+    jwt.sign({ foo: 'bar' }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
+  );
 
+  console.log('Starting jwt verify benchmark...');
   // Warm-up phase
   for (let i = 0; i < 1000; i++) {
     try {
@@ -132,13 +128,13 @@ function benchFilterHas(claims) {
   console.log('***********************************');
 }
 
-function benchFalsePositiveRate() {
+function benchFalsePositiveRate(fp_rate) {
   const NUM_ITEMS = 1000000;
-  const ITERATIONS = 1000;
+  const ITERATIONS = 10;
   let falsePositives = 0;
 
-  // Reset the filters before the benchmark
-  filterClear();
+  setFpRate(fp_rate);
+  console.log('False positive rate benchmark with lower FP rate: ' + fp_rate);
 
   // Generate and insert claims into the filter
   const insertedClaims = generateClaims(NUM_ITEMS, 32);
@@ -153,7 +149,7 @@ function benchFalsePositiveRate() {
   const testClaims = generateClaims(NUM_ITEMS, 32);
 
   // Measure the false positive rate
-  console.log('Starting false positive rate benchmark...');
+  console.log(`Starting false positive rate benchmark with ${ITERATIONS} iterations...`);
   const startTime = performance.now();
 
   for (let i = 0; i < ITERATIONS; i++) {
@@ -172,7 +168,7 @@ function benchFalsePositiveRate() {
 
   console.log('***********************************');
   console.log(`Time taken for FPR benchmark: ${(endTime - startTime).toFixed(2)} milliseconds`);
-  console.log(`False positives: ${falsePositives}`);
+  console.log(`False positives: ${falsePositives} for ${totalChecks} checks`);
   console.log(`False positive rate: ${falsePositiveRate}`);
 }
 
@@ -183,28 +179,12 @@ function benchBloomFilter() {
   benchFilterHas(claims);
 }
 
-benchJWTVerify(NUM_TOKENS);
-benchBloomFilter();
-//benchFalsePositiveRate();
+// Generate 10,000 tokens (avoid V8 optimizations with JIT)
+const NUM_TOKENS = 10000;
+const FP_RATE = 0.00001; // 1e-5
+
+// benchJWTVerify(NUM_TOKENS);
+// benchBloomFilter();
+benchFalsePositiveRate(FP_RATE);
 
 exit(0); // Exit the process because filter rotation is on a timer
-
-// benchFalsePositiveRate() is commented out because it takes a long time to complete
-// and is not necessary for the benchmark. It is included for reference purposes.
-// The benchmark results on my personnal computer are as follows:
-
-// ................
-// ................
-// Iteration: 997
-// Iteration: 998
-// Iteration: 999
-// Iteration: 1000
-// ***********************************
-// Time taken for FPR benchmark: 1223032.74 milliseconds
-// False positives: 0
-// False positive rate: 0
-
-// The false positive rate is 0, which is expected because the test claims are not in the filter.
-// This is a good indication that the Bloom filter is working as expected.
-// The benchmark took approximately 20 minutes to complete on my old laptop.
-// Just too lazy to implement multithreaded claim generation.

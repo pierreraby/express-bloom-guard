@@ -1,8 +1,9 @@
 import { BloomFilter } from "bloomfilter";
 import { Mutex } from "async-mutex";
 
-const NUM_ITEMS = 1000000;
-const FP_RATE = 0.000000001;
+const NUM_ITEMS = 1000000; // 1 million items
+// const FP_RATE = 0.000000001; // 1e-9
+let FP_RATE = 0.000000001; // var for testing
 const ROTATE_TIME = 1000 * 60 * 5; // 5 minutes
 
 let previous = BloomFilter.withTargetError(NUM_ITEMS, FP_RATE);
@@ -37,4 +38,9 @@ export function filterAdd(value) {
 export function filterHas(value) {
   // Lock-free reading of the filters
   return current.test(value) || previous.test(value);
+}
+
+export function setFpRate(rate) {
+  FP_RATE = rate;
+  filterClear();
 }
